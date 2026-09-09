@@ -117,7 +117,7 @@ Contains login form = Yes
 
 Together, these signals provide much stronger evidence of potential impersonation.
 
-The system therefore follows the principle:
+The system therefore follow the principle:
 
 ```text
 Weak individual signals
