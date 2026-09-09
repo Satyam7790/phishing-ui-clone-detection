@@ -1,6 +1,4 @@
-# phishing-ui-clone-detection
-
-# AI/ML-Based Phishing Domain Detection System
+# phishing-ui-clone-detection 
 
 ## 1. Project Overview
 
