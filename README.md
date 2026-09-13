@@ -1,79 +1,74 @@
-# AI/ML Phishing Domain Detector
+# Phishing Domain Detector
 
-A free, local college-project prototype that estimates whether a website could be a phishing or lookalike domain. It uses a FastAPI backend, a Random Forest classifier, passive webpage analysis, local reference-domain matching, and optional local screenshot comparison. No API key or paid service is required.
+A free, local React + Node.js college-project prototype for estimating whether a URL shows phishing or brand-impersonation characteristics. It performs passive analysis only: it never submits forms, collects credentials, downloads files, or uses API keys.
 
-## Architecture
+## How it works
 
 ```text
-URL → URL/domain features + brand match + best-effort RDAP
-    → passive HTML analysis → optional Playwright screenshots
-    → feature vector → local Random Forest → risk estimate + explanation → dashboard
+React dashboard → POST /api/analyze → Express server
+  → URL feature extraction → brand similarity → basic webpage analysis
+  → transparent Risk Scoring Engine → result dashboard
 ```
+
+The score is an estimate from a transparent prototype risk model, not an AI claim or a definitive security verdict. The design keeps `riskAnalyzer.js` isolated so a trained classifier can replace it later.
 
 ## Features
 
-- Safe HTTP/HTTPS validation; local/private network targets are rejected.
-- URL/domain features: length, digits, hyphens, subdomains, punycode, Unicode, and URL structure.
-- Levenshtein-based lookalike matching against the editable `data/legitimate_domains.json` reference database.
-- Best-effort free RDAP registration lookup; unavailable data remains unavailable rather than being invented.
-- Passive HTML feature extraction, TF-IDF/cosine HTML comparison, and optional Playwright screenshot capture.
-- Local Pillow/NumPy visual comparison when both screenshots are available.
-- A local scikit-learn `RandomForestClassifier` with `predict_proba` and a dynamic, evidence-based explanation.
-- Responsive dashboard with real API calls, pipeline state, and JSON download.
+- React dashboard with real loading, errors, risk cards, feature cards, and dynamic explanations.
+- Express API (`POST /api/analyze`, `GET /api/health`).
+- Understandable URL features: length, digits, hyphens, dots, subdomains, special characters, HTTPS, IP address use, punycode, and unusual structure.
+- Levenshtein-based comparison against an editable local reference-brand database.
+- Basic passive HTML inspection: forms, inputs, password inputs, buttons, links, images, scripts, and login terms.
+- Graceful webpage-fetch failure: the domain-level result still returns.
 
-## Installation
+## Install
 
-macOS/Linux:
+Requires Node.js 18+.
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python ml/train.py
-```
-
-Windows:
-
-```bat
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python ml/train.py
-```
-
-Screenshot comparison is optional. To enable it after installing requirements:
-
-```bash
-playwright install chromium
+npm install
+npm install --prefix server
+npm install --prefix client
 ```
 
 ## Run
 
+Run both applications together:
+
 ```bash
-python run.py
+npm run dev
 ```
 
-Open `http://127.0.0.1:8000`. Alternatively use `uvicorn backend.main:app --reload`.
+Open `http://localhost:5173`. The Express API runs on `http://localhost:5000` and Vite proxies `/api` requests to it.
 
-## API
+To run separately:
 
-- `GET /health` — server and model status.
-- `POST /analyze` — accepts `{"url":"https://example.com"}`.
+```bash
+npm run dev --prefix server
+npm run dev --prefix client
+```
 
-The response includes a probability estimate, risk level, possible impersonation target, features, available similarity values, pipeline statuses, warnings, and evidence-based reasons. Missing page, registration, or screenshot data is returned as `null`/`unavailable`, never fabricated.
+## API example
 
-## Dataset and ML
+```bash
+curl -X POST http://localhost:5000/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+```
 
-`ml/dataset.csv` is **DEMO DATA**, deliberately small and synthetic. Run `python ml/train.py` to train and save `ml/model.pkl`; it prints accuracy, precision, recall, F1, and a confusion matrix on a reproducible held-out demo split. Those are demonstration metrics, not real-world performance. Replace the demo file with a suitably licensed public phishing dataset, retaining the documented feature columns and `label` (0 legitimate, 1 phishing), before drawing real-world performance conclusions.
+The response contains `phishingProbability`, `riskLevel`, closest reference-brand match, extracted features, and reasons created from the actual signals.
 
-## Security and privacy
+## Tests and build
 
-The analyzer is passive: it does not execute downloads, submit forms, or accept credentials. It enforces HTTP(S), timeouts, redirect and response limits, and rejects local/private IP targets. URLs are analyzed by the local backend; no commercial AI service is used.
+```bash
+npm test
+npm run build --prefix client
+```
 
-## Limitations
+## Safety and limitations
 
-This is an educational prototype, not a production security product. Websites can block automated access, many pages require JavaScript, RDAP can be unavailable, and the reference-domain set is intentionally small. Screenshot capture requires a local browser installation. Visual similarity and a probability score are supporting signals, not proof of malicious intent. A larger, independently validated dataset and stronger SSRF protections (including DNS-resolution checks) are recommended for deployment.
+Only `http` and `https` URLs are permitted. Local/private network targets are rejected, page retrieval is time-limited, and only the submitted page is inspected. Some sites block automated requests or render content with JavaScript, so webpage signals may be unavailable. The reference list is deliberately small, and this prototype score is not a production phishing decision.
 
-## Next step
+## Future improvements
 
-Add a carefully curated, labelled public dataset and evaluate the model against a separate real-world test set before expanding the reference-brand database or deploying it beyond a controlled environment.
+Future versions could add RDAP, larger labelled phishing datasets, a properly trained local ML classifier, advanced HTML comparison, screenshot comparison, threat-intelligence feeds, or a browser extension. These are intentionally outside this simple, viva-friendly version.

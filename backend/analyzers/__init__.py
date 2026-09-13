@@ -1,1 +1,0 @@
-"""Independent passive analysis components."""
