@@ -1,0 +1,1 @@
+export default function UrlAnalyzer({url,setUrl,onAnalyze,disabled}){return <form className="url-form" onSubmit={onAnalyze}><input value={url} onChange={e=>setUrl(e.target.value)} type="url" placeholder="https://example.com" aria-label="Website URL" required/><button disabled={disabled}>{disabled?'ANALYZING…':'ANALYZE →'}</button></form>}

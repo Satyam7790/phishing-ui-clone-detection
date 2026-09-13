@@ -1,0 +1,1 @@
+export default function LoadingState(){return <section className="loading"><div className="radar"/><p className="eyebrow">LIVE ANALYSIS</p><h2>Analyzing website…</h2><p>Checking URL features, brand similarity, webpage signals, and risk.</p><div className="loading-steps"><span>URL</span><span>BRAND</span><span>WEBPAGE</span><span>RISK</span></div></section>}

@@ -1,0 +1,1 @@
+export default function FeatureCard({title,items}){return <article className="feature-card"><p className="eyebrow">{title}</p><div className="facts">{items.map(([label,value])=><div key={label}><span>{label}</span><strong>{value ?? 'Unknown'}</strong></div>)}</div></article>}
