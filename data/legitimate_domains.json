@@ -1,0 +1,8 @@
+{
+  "Google": {"domain": "google.com", "url": "https://www.google.com"},
+  "Microsoft": {"domain": "microsoft.com", "url": "https://www.microsoft.com"},
+  "PayPal": {"domain": "paypal.com", "url": "https://www.paypal.com"},
+  "Amazon": {"domain": "amazon.com", "url": "https://www.amazon.com"},
+  "Apple": {"domain": "apple.com", "url": "https://www.apple.com"},
+  "Facebook": {"domain": "facebook.com", "url": "https://www.facebook.com"}
+}
