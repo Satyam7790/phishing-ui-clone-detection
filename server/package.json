@@ -1,0 +1,6 @@
+{
+  "name": "phishing-detector-server",
+  "type": "module",
+  "scripts": { "start": "node server.js", "dev": "node --watch server.js", "test": "node --test" },
+  "dependencies": { "cheerio": "^1.0.0", "cors": "^2.8.5", "express": "^4.21.2" }
+}

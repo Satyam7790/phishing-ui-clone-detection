@@ -1,0 +1,9 @@
+[
+  {"brand":"Google","domain":"google.com"},
+  {"brand":"Microsoft","domain":"microsoft.com"},
+  {"brand":"PayPal","domain":"paypal.com"},
+  {"brand":"Amazon","domain":"amazon.com"},
+  {"brand":"Apple","domain":"apple.com"},
+  {"brand":"Facebook","domain":"facebook.com"},
+  {"brand":"Netflix","domain":"netflix.com"}
+]

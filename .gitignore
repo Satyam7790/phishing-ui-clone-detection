@@ -1,4 +1,8 @@
 .venv/
+node_modules/
+server/node_modules/
+client/node_modules/
+dist/
 __pycache__/
 *.py[cod]
 .pytest_cache/
